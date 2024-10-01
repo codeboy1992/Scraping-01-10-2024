@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import time
 
 # URL de la page aléatoire
 url = "https://quotes.toscrape.com/random"
@@ -23,6 +24,9 @@ def scrape_quote():
         'tags': tags
     }
 
+# Démarrer le timer
+start_time = time.time()
+
 # Boucle pour récupérer des citations jusqu'à 100 uniques
 while len(unique_quotes) < target_quotes:
     new_quote = scrape_quote()
@@ -37,6 +41,12 @@ while len(unique_quotes) < target_quotes:
             duplicate_quotes[quote_identifier] = new_quote
         print(f"Duplicate found: {new_quote['quote']}\nAuthor: {new_quote['author']}\nTags: {', '.join(new_quote['tags'])}\n")
 
+# Calculer le temps écoulé à la fin
+elapsed_time = time.time() - start_time
+hours, remainder = divmod(int(elapsed_time), 3600)
+minutes, seconds = divmod(remainder, 60)
+
 # Afficher les résultats
 print(f"\nTotal des citations uniques récupérées : {len(unique_quotes)}")
 print(f"Total des doublons trouvés : {len(duplicate_quotes)}")
+print(f"Temps écoulé : {hours:02}:{minutes:02}:{seconds:02}")
