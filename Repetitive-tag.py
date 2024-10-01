@@ -28,7 +28,14 @@ if tags_table:
             if '(' in item:  # Assurer que chaque tag est bien formaté comme 'tag(number)'
                 try:
                     tag, count = item.split('(')  # Séparer le tag et son occurrence
-                    tag_list.append((tag.strip(), int(count)))  # Ajouter à la liste en format (tag, occurrence)
+                    tag = tag.strip()
+
+                    # Vérifier si le tag commence par "Top Ten tags" collé à un autre mot
+                    if "top ten tags" in tag.lower():
+                        tag = tag.replace("Top Ten tags", "").strip()  # Supprimer cette partie
+
+                    if tag:  # Vérifier si le tag n'est pas vide après cette opération
+                        tag_list.append((tag, int(count)))  # Ajouter à la liste en format (tag, occurrence)
                 except ValueError:
                     # S'il y a un problème avec la conversion des nombres, on passe
                     continue
@@ -37,7 +44,7 @@ if tags_table:
     if tag_list:
         most_common_tag = max(tag_list, key=lambda x: x[1])  # Trouver le tag avec l'occurrence maximale
 
-        # Afficher le tag le plus utilisé
+        # Afficher le tag le plus utilisé avec le nombre d'occurrences
         print(f"Le tag le plus utilisé est '{most_common_tag[0]}' avec {most_common_tag[1]} occurrences.")
     else:
         print("Aucun tag pertinent trouvé.")
